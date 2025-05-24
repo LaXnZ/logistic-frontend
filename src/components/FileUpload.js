@@ -8,14 +8,25 @@ function FileUpload({ companyId }) {
   const handleUpload = async () => {
     if (!file) return alert("Please select a file first.");
     await uploadFile(file, companyId);
-    alert("Uploaded successfully!");
+    alert("✅ Uploaded successfully!");
   };
 
   return (
-    <div>
-      <h3>Upload Excel File</h3>
-      <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-      <button onClick={handleUpload}>Upload</button>
+    <div
+      className="p-6 mt-8 rounded-md"
+      style={{ borderColor: "black", borderWidth: "0.5px" }}
+    >
+      <input
+        type="file"
+        className="block w-full text-sm text-gray-700 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        onChange={(e) => setFile(e.target.files[0])}
+      />
+      <button
+        onClick={handleUpload}
+        className="mt-4 w-full bg-green-100  hover:bg-blue-700 text-black font-medium py-2 px-4 rounded-sm transition-all"
+      >
+        Upload
+      </button>
     </div>
   );
 }

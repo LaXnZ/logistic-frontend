@@ -7,7 +7,6 @@ function AdminDashboard() {
   const [selectedCompany, setSelectedCompany] = useState("");
   const { fetchRecords, fetchCompanies } = useApiClient();
 
-  // ✅ Load companies first
   useEffect(() => {
     const loadCompanies = async () => {
       try {
@@ -27,7 +26,6 @@ function AdminDashboard() {
     loadCompanies();
   }, []);
 
-  // ✅ Load records — for all companies if none selected
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -62,7 +60,6 @@ function AdminDashboard() {
     }
   }, [companies, selectedCompany]);
 
-  // 🔍 Calculate analytics from current records
   const getAnalytics = () => {
     const total = records.length;
     const statusCounts = {};
@@ -103,12 +100,16 @@ function AdminDashboard() {
   const analytics = getAnalytics();
 
   return (
-    <div>
-      <h3>📊 Admin Dashboard</h3>
-
-      <label>
-        Filter by Company:{" "}
+    <div
+      className="p-6 mt-8 rounded-md"
+      style={{ borderColor: "black", borderWidth: "0.5px" }}
+    >
+      <div className="flex items-center gap-3 mb-4">
+        <label className="text-gray-700 font-medium whitespace-nowrap">
+          Filter by Company:
+        </label>
         <select
+          className="flex-1 border border-gray-300 rounded-sm px-3 py-2"
           value={selectedCompany}
           onChange={(e) => setSelectedCompany(e.target.value)}
         >
@@ -119,38 +120,44 @@ function AdminDashboard() {
             </option>
           ))}
         </select>
-      </label>
+      </div>
 
-      <div style={{ marginTop: "1rem" }}>
-        <p>
-          <strong>Total Companies:</strong> {companies.length}
-        </p>
-        <p>
-          <strong>Total Records:</strong> {analytics.total}
-        </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+        <div className="bg-blue-50 p-4 rounded-sm shadow">
+          <p className="font-semibold">Total Companies</p>
+          <p className="text-xl">{companies.length}</p>
+        </div>
+        <div className="bg-green-50 p-4 rounded-sm shadow">
+          <p className="font-semibold">Total Records</p>
+          <p className="text-xl">{analytics.total}</p>
+        </div>
+      </div>
 
-        <p>
-          <strong>Delivery Status Counts:</strong>
-        </p>
-        <ul>
+      <div className="mt-6">
+        <h4 className="text-lg font-semibold mb-2">Delivery Status Counts:</h4>
+        <ul className="list-disc list-inside">
           {Object.entries(analytics.statusCounts).map(([status, count]) => (
             <li key={status}>
-              {status}: {count}
+              <strong>{status}:</strong> {count}
             </li>
           ))}
         </ul>
+      </div>
 
-        <p>
-          <strong>Latest Upload per Company:</strong>
-        </p>
-        <ul>
+      <div className="mt-6">
+        <h4 className="text-lg font-semibold mb-2">
+          Latest Upload per Company:
+        </h4>
+        <ul className="list-disc list-inside">
           {Object.entries(analytics.latestUpload).map(([company, date]) => (
             <li key={company}>
-              {company}: {date}
+              <strong>{company}:</strong> {date}
             </li>
           ))}
         </ul>
+      </div>
 
+      <div className="mt-6">
         <p>
           <strong>Most Active Driver:</strong> {analytics.mostActiveDriver}
         </p>

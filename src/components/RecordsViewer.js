@@ -4,10 +4,9 @@ import { useApiClient } from "../api/apiClient";
 function RecordsViewer() {
   const [records, setRecords] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [selectedCompany, setSelectedCompany] = useState(""); // No default selection
+  const [selectedCompany, setSelectedCompany] = useState("");
   const { fetchRecords, fetchCompanies } = useApiClient();
 
-  // Load company list once
   useEffect(() => {
     const loadCompanies = async () => {
       try {
@@ -29,7 +28,6 @@ function RecordsViewer() {
     loadCompanies();
   }, []);
 
-  // Load records only when a company is selected
   useEffect(() => {
     const loadRecords = async () => {
       if (!selectedCompany) return;
@@ -56,14 +54,18 @@ function RecordsViewer() {
   }, [selectedCompany]);
 
   return (
-    <div>
-      <h4>Processed Records</h4>
-
-      <label>
-        Select Company:{" "}
+    <div
+      className="p-6 mt-8 rounded-md"
+      style={{ borderColor: "black", borderWidth: "0.5px" }}
+    >
+      <div className="flex items-center gap-3 mb-4">
+        <label className="text-gray-700 font-medium whitespace-nowrap">
+          Select Company:
+        </label>
         <select
           value={selectedCompany}
           onChange={(e) => setSelectedCompany(e.target.value)}
+          className="flex-1 border border-gray-300 rounded-sm p-2 focus:ring-2 focus:ring-blue-500"
         >
           <option value="" disabled>
             -- Choose a company --
@@ -74,38 +76,83 @@ function RecordsViewer() {
             </option>
           ))}
         </select>
-      </label>
+      </div>
 
       {!selectedCompany ? (
-        <p style={{ marginTop: "1rem" }}>Please select a company to view records.</p>
+        <p className="text-gray-600">
+          Please select a company to view records.
+        </p>
       ) : records.length === 0 ? (
-        <p style={{ marginTop: "1rem" }}>No records found.</p>
+        <p className="text-gray-600">No records found.</p>
       ) : (
-        <table
-          border="1"
-          style={{ marginTop: "1rem", width: "100%", textAlign: "left" }}
-        >
-          <thead>
-            <tr>
-              <th>Driver ID</th>
-              <th>Route</th>
-              <th>Status</th>
-              <th>Date</th>
-           
-            </tr>
-          </thead>
-          <tbody>
-            {records.map((r, i) => (
-              <tr key={i}>
-                <td>{r.DriverID}</td>
-                <td>{r.Route}</td>
-                <td>{r.DeliveryStatus}</td>
-                <td>{r.DeliveryDate}</td>
-                
+        <div className="overflow-x-auto">
+          <table
+            className="w-full text-left rounded-sm"
+            style={{ border: "0.5px solid black" }}
+          >
+            <thead
+              className="bg-gray-100 text-gray-700"
+              style={{ borderColor: "black", borderWidth: "0.5px" }}
+            >
+              <tr>
+                <th
+                  className="px-4 py-2 border-b"
+                  style={{ borderColor: "black", borderWidth: "0.5px" }}
+                >
+                  Driver ID
+                </th>
+                <th
+                  className="px-4 py-2 border-b"
+                  style={{ borderColor: "black", borderWidth: "0.5px" }}
+                >
+                  Route
+                </th>
+                <th
+                  className="px-4 py-2 border-b"
+                  style={{ borderColor: "black", borderWidth: "0.5px" }}
+                >
+                  Status
+                </th>
+                <th
+                  className="px-4 py-2 border-b"
+                  style={{ borderColor: "black", borderWidth: "0.5px" }}
+                >
+                  Date
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {records.map((r, i) => (
+                <tr key={i} className="hover:bg-blue-50 transition-colors">
+                  <td
+                    className="px-4 py-2 border-b"
+                    style={{ borderColor: "black", borderWidth: "0.5px" }}
+                  >
+                    {r.DriverID}
+                  </td>
+                  <td
+                    className="px-4 py-2 border-b"
+                    style={{ borderColor: "black", borderWidth: "0.5px" }}
+                  >
+                    {r.Route}
+                  </td>
+                  <td
+                    className="px-4 py-2 border-b"
+                    style={{ borderColor: "black", borderWidth: "0.5px" }}
+                  >
+                    {r.DeliveryStatus}
+                  </td>
+                  <td
+                    className="px-4 py-2 border-b"
+                    style={{ borderColor: "black", borderWidth: "0.5px" }}
+                  >
+                    {r.DeliveryDate}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

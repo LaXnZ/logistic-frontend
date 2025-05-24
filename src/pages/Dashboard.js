@@ -1,6 +1,5 @@
 import React from "react";
 import FileUpload from "../components/FileUpload";
-import UploadStatus from "../components/UploadStatus";
 import RecordsViewer from "../components/RecordsViewer";
 import { useAuth } from "react-oidc-context";
 import AdminDashboard from "../components/AdminDashboard";

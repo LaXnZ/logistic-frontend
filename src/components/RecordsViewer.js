@@ -1,66 +1,97 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useApiClient } from "../api/apiClient";
 
-function RecordsViewer({ user }) {
+function RecordsViewer() {
   const [records, setRecords] = useState([]);
-  const { fetchRecords } = useApiClient();
+  const [companies, setCompanies] = useState([]);
+  const [selectedCompany, setSelectedCompany] = useState(""); // No default selection
+  const { fetchRecords, fetchCompanies } = useApiClient();
 
-  // ✅ Company ID mapping based on email domain
-  const companyId = useMemo(() => {
-    if (!user?.email) return null;
+  // Load company list once
+  useEffect(() => {
+    const loadCompanies = async () => {
+      try {
+        const res = await fetchCompanies();
+        const body =
+          typeof res.data.body === "string"
+            ? JSON.parse(res.data.body)
+            : res.data.body;
+        const list = body?.companies || [];
 
-    const email = user.email.toLowerCase();
-    const domain = email.split("@")[1];
-
-    const domainToCompanyMap = {
-      "gmail.com": "company-b",
-      "placeholder.com": "company-b",
-      "companyc.com": "company-c",
+        if (Array.isArray(list)) {
+          setCompanies(list);
+        }
+      } catch (err) {
+        console.error("❌ Error loading companies:", err);
+      }
     };
 
-    return domainToCompanyMap[domain] || "company-b"; // fallback
-  }, [user?.email]);
+    loadCompanies();
+  }, []);
 
+  // Load records only when a company is selected
   useEffect(() => {
     const loadRecords = async () => {
-      if (!companyId) return;
+      if (!selectedCompany) return;
+      console.log("📡 Fetching records for:", selectedCompany);
+
       try {
-        console.log("📡 Fetching records for:", companyId);
-        const res = await fetchRecords(companyId);
-        const data = res.data;
+        const res = await fetchRecords(selectedCompany);
 
-        let parsedRecords = [];
-        if (Array.isArray(data)) {
-          parsedRecords = data;
-        } else if (typeof data === "string") {
-          const parsed = JSON.parse(data);
-          parsedRecords = parsed?.records || parsed?.body || [];
-        } else if (typeof data === "object") {
-          parsedRecords = data?.records || data?.body || [];
-        }
+        const parsed = (() => {
+          if (res.data.records) return res.data;
+          if (typeof res.data.body === "string")
+            return JSON.parse(res.data.body);
+          return res.data.body || {};
+        })();
 
-        setRecords(Array.isArray(parsedRecords) ? parsedRecords : []);
+        setRecords(parsed.records || []);
       } catch (err) {
         console.error("❌ Error fetching records:", err);
+        setRecords([]);
       }
     };
 
     loadRecords();
-  }, [companyId, fetchRecords]);
+  }, [selectedCompany]);
 
   return (
     <div>
       <h4>Processed Records</h4>
-      {records.length === 0 ? (
-        <p>No records found.</p>
+
+      <label>
+        Select Company:{" "}
+        <select
+          value={selectedCompany}
+          onChange={(e) => setSelectedCompany(e.target.value)}
+        >
+          <option value="" disabled>
+            -- Choose a company --
+          </option>
+          {companies.map((company) => (
+            <option key={company} value={company}>
+              {company}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      {!selectedCompany ? (
+        <p style={{ marginTop: "1rem" }}>Please select a company to view records.</p>
+      ) : records.length === 0 ? (
+        <p style={{ marginTop: "1rem" }}>No records found.</p>
       ) : (
-        <table border="1">
+        <table
+          border="1"
+          style={{ marginTop: "1rem", width: "100%", textAlign: "left" }}
+        >
           <thead>
             <tr>
               <th>Driver ID</th>
               <th>Route</th>
               <th>Status</th>
               <th>Date</th>
+           
             </tr>
           </thead>
           <tbody>
@@ -70,6 +101,7 @@ function RecordsViewer({ user }) {
                 <td>{r.Route}</td>
                 <td>{r.DeliveryStatus}</td>
                 <td>{r.DeliveryDate}</td>
+                
               </tr>
             ))}
           </tbody>

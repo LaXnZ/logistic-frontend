@@ -17,6 +17,11 @@ export const useApiClient = () => {
     };
   };
 
+  const fetchCompanies = () =>
+  axios.get(`${API_BASE_URL}/companies`, {
+    headers: getAuthHeader(),
+  });
+
   const uploadFile = async (file, companyId) => {
     const base64File = await fileToBase64(file);
     return axios.post(
@@ -49,7 +54,7 @@ export const useApiClient = () => {
     });
   };
 
-  return { uploadFile, fetchStatus, fetchRecords };
+  return { uploadFile, fetchStatus, fetchRecords, fetchCompanies };
 };
 
 const fileToBase64 = (file) =>

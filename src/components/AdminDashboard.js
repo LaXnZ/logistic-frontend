@@ -12,9 +12,10 @@ function AdminDashboard() {
     const loadCompanies = async () => {
       try {
         const res = await fetchCompanies();
-        const body = typeof res.data?.body === "string"
-          ? JSON.parse(res.data.body)
-          : res.data?.body || res.data;
+        const body =
+          typeof res.data?.body === "string"
+            ? JSON.parse(res.data.body)
+            : res.data?.body || res.data;
 
         const list = body?.companies || [];
         setCompanies(list);
@@ -32,17 +33,19 @@ function AdminDashboard() {
       try {
         if (selectedCompany) {
           const res = await fetchRecords(selectedCompany);
-          const parsed = typeof res.data?.body === "string"
-            ? JSON.parse(res.data.body)
-            : res.data?.body || res.data;
+          const parsed =
+            typeof res.data?.body === "string"
+              ? JSON.parse(res.data.body)
+              : res.data?.body || res.data;
 
           setRecords(parsed.records || []);
         } else {
           const allResponses = await Promise.all(companies.map(fetchRecords));
           const allRecords = allResponses.flatMap((r) => {
-            const parsed = typeof r.data?.body === "string"
-              ? JSON.parse(r.data.body)
-              : r.data?.body || r.data;
+            const parsed =
+              typeof r.data?.body === "string"
+                ? JSON.parse(r.data.body)
+                : r.data?.body || r.data;
 
             return Array.isArray(parsed?.records) ? parsed.records : [];
           });
@@ -69,7 +72,8 @@ function AdminDashboard() {
 
     records.forEach((rec) => {
       if (!rec) return;
-      statusCounts[rec.DeliveryStatus] = (statusCounts[rec.DeliveryStatus] || 0) + 1;
+      statusCounts[rec.DeliveryStatus] =
+        (statusCounts[rec.DeliveryStatus] || 0) + 1;
       driverCounts[rec.DriverID] = (driverCounts[rec.DriverID] || 0) + 1;
       routeCounts[rec.Route] = (routeCounts[rec.Route] || 0) + 1;
 
@@ -80,8 +84,12 @@ function AdminDashboard() {
       }
     });
 
-    const mostActiveDriver = Object.entries(driverCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
-    const mostFrequentRoute = Object.entries(routeCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+    const mostActiveDriver = Object.entries(driverCounts).sort(
+      (a, b) => b[1] - a[1]
+    )[0]?.[0];
+    const mostFrequentRoute = Object.entries(routeCounts).sort(
+      (a, b) => b[1] - a[1]
+    )[0]?.[0];
 
     return {
       total,
@@ -114,21 +122,41 @@ function AdminDashboard() {
       </label>
 
       <div style={{ marginTop: "1rem" }}>
-        <p><strong>Total Records:</strong> {analytics.total}</p>
-        <p><strong>Delivery Status Counts:</strong></p>
+        <p>
+          <strong>Total Companies:</strong> {companies.length}
+        </p>
+        <p>
+          <strong>Total Records:</strong> {analytics.total}
+        </p>
+
+        <p>
+          <strong>Delivery Status Counts:</strong>
+        </p>
         <ul>
           {Object.entries(analytics.statusCounts).map(([status, count]) => (
-            <li key={status}>{status}: {count}</li>
+            <li key={status}>
+              {status}: {count}
+            </li>
           ))}
         </ul>
-        <p><strong>Latest Upload per Company:</strong></p>
+
+        <p>
+          <strong>Latest Upload per Company:</strong>
+        </p>
         <ul>
           {Object.entries(analytics.latestUpload).map(([company, date]) => (
-            <li key={company}>{company}: {date}</li>
+            <li key={company}>
+              {company}: {date}
+            </li>
           ))}
         </ul>
-        <p><strong>Most Active Driver:</strong> {analytics.mostActiveDriver}</p>
-        <p><strong>Most Frequent Route:</strong> {analytics.mostFrequentRoute}</p>
+
+        <p>
+          <strong>Most Active Driver:</strong> {analytics.mostActiveDriver}
+        </p>
+        <p>
+          <strong>Most Frequent Route:</strong> {analytics.mostFrequentRoute}
+        </p>
       </div>
     </div>
   );

@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useApiClient } from "../api/apiClient";
+import { useAuth } from "react-oidc-context";
 
 function FileUpload({ companyId }) {
+  const auth = useAuth();
   const [file, setFile] = useState(null);
   const { uploadFile } = useApiClient();
 
   const handleUpload = async () => {
     if (!file) return alert("Please select a file first.");
     try {
-      await uploadFile(file, companyId);
+      await uploadFile(file, companyId, auth.user?.profile.email);
       alert("✅ Uploaded successfully!");
       setFile(null);
     } catch (error) {

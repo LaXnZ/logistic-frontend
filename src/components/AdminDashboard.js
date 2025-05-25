@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useApiClient } from "../api/apiClient";
 import TopPerformingCompanyCard from "./admin/TopPerformingCompanyCard";
+import DeliverySuccessRateCard from "./admin/DeliverySuccessRateCard";
 
 function AdminDashboard() {
   const [records, setRecords] = useState([]);
@@ -100,86 +101,96 @@ function AdminDashboard() {
 
   const analytics = getAnalytics();
 
-  return (
-    <div
-      className="p-6 mt-8 rounded-md"
-      style={{ borderColor: "black", borderWidth: "0.5px" }}
-    >
-      <div>
-        <div className="flex items-center gap-3 mb-4">
-          <label className="text-gray-700 font-medium whitespace-nowrap">
-            Filter by Company:
-          </label>
-          <select
-            className="flex-1 border border-gray-300 rounded-sm px-3 py-2"
-            value={selectedCompany}
-            onChange={(e) => setSelectedCompany(e.target.value)}
-          >
-            <option value="">-- All Companies --</option>
-            {companies.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
+return (
+    <div className="p-8 mt-10 rounded-lg shadow-lg bg-white border border-gray-200">
+        <div>
+            {/* Filter */}
+            <div className="flex items-center gap-4 mb-6">
+                <label className="text-gray-700 font-semibold whitespace-nowrap">
+                    Filter by Company:
+                </label>
+                <select
+                    className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                    value={selectedCompany}
+                    onChange={(e) => setSelectedCompany(e.target.value)}
+                >
+                    <option value="">-- All Companies --</option>
+                    {companies.map((c) => (
+                        <option key={c} value={c}>
+                            {c}
+                        </option>
+                    ))}
+                </select>
+            </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-          <div className="bg-blue-50 p-4 rounded-sm shadow">
-            <p className="font-semibold">Total Companies</p>
-            <p className="text-xl">{companies.length}</p>
-          </div>
-          <div className="bg-green-50 p-4 rounded-sm shadow">
-            <p className="font-semibold">Total Records</p>
-            <p className="text-xl">{analytics.total}</p>
-          </div>
-        </div>
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+                <div className="bg-blue-100 p-6 rounded-lg shadow flex flex-col items-center">
+                    <p className="font-semibold text-blue-900">Total Companies</p>
+                    <p className="text-3xl font-bold text-blue-700 mt-2">{companies.length}</p>
+                </div>
+                <div className="bg-green-100 p-6 rounded-lg shadow flex flex-col items-center">
+                    <p className="font-semibold text-green-900">Total Records</p>
+                    <p className="text-3xl font-bold text-green-700 mt-2">{analytics.total}</p>
+                </div>
+            </div>
 
-        <div className="mt-6">
-          <h4 className="text-lg font-semibold mb-2">
-            Delivery Status Counts:
-          </h4>
-          <ul className="list-disc list-inside">
-            {Object.entries(analytics.statusCounts).map(([status, count]) => (
-              <li key={status}>
-                <strong>{status}:</strong> {count}
-              </li>
-            ))}
-          </ul>
-        </div>
+            {/* Delivery Status */}
+            <div className="mt-8">
+                <h4 className="text-lg font-semibold mb-3 text-gray-800">
+                    Delivery Status Counts
+                </h4>
+                <ul className="list-disc list-inside space-y-1 pl-4">
+                    {Object.entries(analytics.statusCounts).map(([status, count]) => (
+                        <li key={status} className="text-gray-700">
+                            <span className="font-medium">{status}:</span> {count}
+                        </li>
+                    ))}
+                </ul>
+            </div>
 
-        <div className="mt-6">
-          <h4 className="text-lg font-semibold mb-2">
-            Latest Upload per Company:
-          </h4>
-          <ul className="list-disc list-inside">
-            {Object.entries(analytics.latestUpload).map(([company, date]) => (
-              <li key={company}>
-                <strong>{company}:</strong> {date}
-              </li>
-            ))}
-          </ul>
-        </div>
+            {/* Latest Upload */}
+            <div className="mt-8">
+                <h4 className="text-lg font-semibold mb-3 text-gray-800">
+                    Latest Upload per Company
+                </h4>
+                <ul className="list-disc list-inside space-y-1 pl-4">
+                    {Object.entries(analytics.latestUpload).map(([company, date]) => (
+                        <li key={company} className="text-gray-700">
+                            <span className="font-medium">{company}:</span> {date}
+                        </li>
+                    ))}
+                </ul>
+            </div>
 
-        <div className="mt-6">
-          <p>
-            <strong>Most Active Driver:</strong> {analytics.mostActiveDriver}
-          </p>
-          <p>
-            <strong>Most Frequent Route:</strong> {analytics.mostFrequentRoute}
-          </p>
+            {/* Highlights */}
+            <div className="mt-8 flex flex-col sm:flex-row gap-6">
+                <div className="bg-yellow-50 p-4 rounded-lg flex-1 shadow">
+                    <p className="text-gray-700">
+                        <span className="font-semibold">Most Active Driver:</span>{" "}
+                        <span className="text-yellow-700">{analytics.mostActiveDriver || "N/A"}</span>
+                    </p>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg flex-1 shadow">
+                    <p className="text-gray-700">
+                        <span className="font-semibold">Most Frequent Route:</span>{" "}
+                        <span className="text-purple-700">{analytics.mostFrequentRoute || "N/A"}</span>
+                    </p>
+                </div>
+            </div>
+
+            {/* Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                <div className="p-6 rounded-lg border border-blue-200 bg-blue-50 shadow">
+                    <TopPerformingCompanyCard records={records} />
+                </div>
+                <div className="p-6 rounded-lg border border-green-200 bg-green-50 shadow">
+                    <DeliverySuccessRateCard records={records} />
+                </div>
+            </div>
         </div>
-        <div
-          className="p-6 mt-8 rounded-md"
-          style={{ borderColor: "black", borderWidth: "0.5px" }}
-        >
-          {" "}
-          <TopPerformingCompanyCard records={records} />
-        </div>
-        <hr />
-      </div>
     </div>
-  );
+);
 }
 
 export default AdminDashboard;

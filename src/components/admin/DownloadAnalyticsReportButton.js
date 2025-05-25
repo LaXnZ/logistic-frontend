@@ -30,9 +30,14 @@ function DownloadAnalyticsReportButton({
       pdf.line(padding, pageHeight - 10, pageWidth - padding, pageHeight - 10);
       pdf.setFontSize(9);
       pdf.setTextColor(120);
-      pdf.text(`XYZ Logistics Portal | Page ${pageCount}`, pageWidth / 2, pageHeight - 5, {
-        align: "center",
-      });
+      pdf.text(
+        `XYZ Logistics Portal | Page ${pageCount}`,
+        pageWidth / 2,
+        pageHeight - 5,
+        {
+          align: "center",
+        }
+      );
     };
 
     const addNewPage = () => {
@@ -135,7 +140,16 @@ function DownloadAnalyticsReportButton({
           const x = padding + (contentWidth - imgWidth) / 2;
           const y = padding + yOffset;
 
-          pdf.addImage(imgData, "PNG", x, y, imgWidth, imgHeight, undefined, "FAST");
+          pdf.addImage(
+            imgData,
+            "PNG",
+            x,
+            y,
+            imgWidth,
+            imgHeight,
+            undefined,
+            "FAST"
+          );
         }
       };
 
@@ -151,7 +165,7 @@ function DownloadAnalyticsReportButton({
   return (
     <button
       onClick={exportToPDF}
-      className="mt-6 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded text-sm border shadow"
+      className="mt-6 bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-md text-sm font-medium shadow-md border border-green-600 transition-all"
     >
       📥 Download Analytics Report (PDF)
     </button>

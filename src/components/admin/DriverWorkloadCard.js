@@ -8,7 +8,9 @@ function DriverWorkloadCard({ records }) {
     return acc;
   }, {});
 
-  const sortedDrivers = Object.entries(driverCounts).sort((a, b) => b[1] - a[1]);
+  const sortedDrivers = Object.entries(driverCounts).sort(
+    (a, b) => b[1] - a[1]
+  );
   const [filter, setFilter] = useState("top5");
 
   const filteredDrivers =
@@ -19,13 +21,15 @@ function DriverWorkloadCard({ records }) {
       : sortedDrivers.filter(([driver]) => driver === filter);
 
   return (
-    <div className="bg-white p-4 rounded-lg border">
+    <div className="bg-white p-6 rounded-lg border border-green-100 shadow-sm">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="font-semibold text-lg">🚛 Driver Workload</h4>
+        <h4 className="text-lg font-semibold text-green-800">
+          🚛 Driver Workload
+        </h4>
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="border border-gray-300 text-sm px-2 py-1 rounded"
+          className="border border-gray-300 text-sm px-3 py-1.5 rounded-md focus:ring-2 focus:ring-green-300"
         >
           <option value="top5">Top 5</option>
           <option value="all">Show All</option>
@@ -41,10 +45,12 @@ function DriverWorkloadCard({ records }) {
         {filteredDrivers.map(([driver, count]) => (
           <div
             key={driver}
-            className="flex justify-between items-center px-3 py-2 bg-gray-50 rounded text-gray-700"
+            className="flex justify-between items-center px-4 py-2 bg-green-50 hover:bg-green-100 rounded-md transition"
           >
-            <span className="font-medium">{driver}</span>
-            <span className="font-semibold">{count} deliveries</span>
+            <span className="text-green-800 font-medium">{driver}</span>
+            <span className="text-green-700 font-semibold">
+              {count} deliveries
+            </span>
           </div>
         ))}
       </div>

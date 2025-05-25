@@ -7,16 +7,14 @@ import {
   endOfWeek,
   startOfMonth,
   endOfMonth,
-  isSameDay,
-  getMonth,
 } from "date-fns";
 
 const COLOR_SCALE = [
-  "#f0f9ff", // 0
-  "#bae6fd", // 1-2
-  "#7dd3fc", // 3-4
-  "#38bdf8", // 5-6
-  "#0ea5e9", // 7+
+  "#ecfdf5", // 0 - pastel greenish-white
+  "#bbf7d0", // 1-2 - light mint
+  "#86efac", // 3-4 - mint
+  "#4ade80", // 5-6 - green
+  "#22c55e", // 7+ - deep green
 ];
 
 function getColor(count) {
@@ -50,14 +48,14 @@ function DeliveryVolumeHeatmap({ records }) {
   );
 
   return (
-   <div className="bg-white p-4 rounded-lg border">
-      <h3 className="font-semibold text-lg mb-4">
-         🌡️ Delivery Volume Heatmap
+    <div className="bg-white p-6 rounded-lg border border-green-100 shadow-sm">
+      <h3 className="text-lg font-semibold text-green-800 mb-2">
+        🌡️ Delivery Volume Heatmap
       </h3>
       <p className="text-sm text-gray-600 mb-4">{currentMonth}</p>
 
       {/* Weekday Labels */}
-      <div className="grid grid-cols-7 gap-2 text-center text-xs font-medium text-gray-500 mb-1">
+      <div className="grid grid-cols-7 gap-1 text-center text-xs text-gray-500 mb-2 font-medium">
         <div>Sun</div>
         <div>Mon</div>
         <div>Tue</div>
@@ -67,8 +65,8 @@ function DeliveryVolumeHeatmap({ records }) {
         <div>Sat</div>
       </div>
 
-      {/* Calendar Heatmap */}
-      <div className="grid grid-cols-7 gap-1 text-center">
+      {/* Calendar Grid */}
+      <div className="grid grid-cols-7 gap-1">
         {days.map((date) => {
           const key = format(date, "yyyy-MM-dd");
           const count = dateCounts[key] || 0;
@@ -77,18 +75,18 @@ function DeliveryVolumeHeatmap({ records }) {
           return (
             <div
               key={key}
-              className="relative h-12 w-full rounded text-xs flex items-center justify-center shadow-sm"
+              className="relative h-12 w-full rounded flex items-center justify-center text-xs shadow-sm transition"
               title={`${key}: ${count} deliveries`}
-              style={{
-                backgroundColor: getColor(count),
-              }}
+              style={{ backgroundColor: getColor(count) }}
             >
-              <span className="absolute top-0 left-0 text-[10px] text-gray-700 pl-1 pt-1">
+              <span className="absolute top-1 left-1 text-[10px] text-gray-600">
                 {dayNum}
               </span>
-              <span className="text-[11px] font-semibold">
-                {count > 0 ? count : ""}
-              </span>
+              {count > 0 && (
+                <span className="text-[11px] font-medium text-gray-800">
+                  {count}
+                </span>
+              )}
             </div>
           );
         })}

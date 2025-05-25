@@ -74,7 +74,7 @@ function RecordsViewer({ companyId }) {
 
   return (
     <div
-      className="p-6 mt-8 rounded-md"
+      className="p-6 rounded-lg"
       style={{ borderColor: "black", borderWidth: "0.5px" }}
     >
       {!companyId && (
@@ -104,7 +104,7 @@ function RecordsViewer({ companyId }) {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-1 text-sm"
+            className="border  rounded px-3 py-1 text-sm"
           >
             <option value="date">Sort by Date</option>
             <option value="status">Sort by Status</option>
@@ -113,7 +113,7 @@ function RecordsViewer({ companyId }) {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-1 text-sm"
+            className="border  rounded px-3 py-1 text-sm"
           >
             <option value="all">Show All</option>
             <option value="Completed">Only Completed</option>

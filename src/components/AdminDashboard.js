@@ -117,13 +117,13 @@ function AdminDashboard() {
   const analytics = getAnalytics();
 
   return (
-    <div className="p-8 mt-10 rounded-lg bg-white border border-gray-200">
+    <div className="p-8 rounded-lg bg-white "  style={{ borderColor: "black", borderWidth: "0.5px" }}>
       <div className="flex items-center gap-4 mb-6">
         <label className="text-gray-700 font-semibold whitespace-nowrap">
           Filter by Company:
         </label>
         <select
-          className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 transition"
           value={selectedCompany}
           onChange={(e) => setSelectedCompany(e.target.value)}
         >
@@ -136,13 +136,13 @@ function AdminDashboard() {
 
       <div id="analytics-section">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-          <div className="bg-blue-100 p-6 rounded-lg border flex flex-col items-center">
-            <p className="font-semibold text-blue-900">Total Companies</p>
-            <p className="text-3xl font-bold text-blue-700 mt-2">{companies.length}</p>
+          <div className="bg-green-100 p-6 rounded-lg border flex flex-col items-center">
+            <p className="font-semibold text-green-900">Total Companies</p>
+            <p className="text-3xl font-bold text-green-700 mt-2">{companies.length}</p>
           </div>
           <div className="bg-green-100 p-6 rounded-lg border flex flex-col items-center">
             <p className="font-semibold text-green-900">Total Records</p>
-            <p className="text-3xl font-bold text-green-700 mt-2">{analytics.total}</p>
+            <p className="text-3xl font-bold text-green-800 mt-2">{analytics.total}</p>
           </div>
         </div>
 
@@ -170,16 +170,16 @@ function AdminDashboard() {
         </div>
 
         <div className="mt-8 flex flex-col sm:flex-row gap-6">
-          <div className="bg-yellow-50 p-4 rounded-lg flex-1 border">
+          <div className="bg-green-50 p-4 rounded-lg flex-1 border">
             <p className="text-gray-700">
               <span className="font-semibold">Most Active Driver:</span>{" "}
-              <span className="text-yellow-700">{analytics.mostActiveDriver || "N/A"}</span>
+              <span className="text-green-700">{analytics.mostActiveDriver || "N/A"}</span>
             </p>
           </div>
-          <div className="bg-purple-50 p-4 rounded-lg flex-1 border">
+          <div className="bg-green-50 p-4 rounded-lg flex-1 border">
             <p className="text-gray-700">
               <span className="font-semibold">Most Frequent Route:</span>{" "}
-              <span className="text-purple-700">{analytics.mostFrequentRoute || "N/A"}</span>
+              <span className="text-green-700">{analytics.mostFrequentRoute || "N/A"}</span>
             </p>
           </div>
         </div>

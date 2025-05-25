@@ -16,12 +16,9 @@ function DailyUploadTrendChart({ records }) {
   const minDate = new Date(Math.min(...allDates.map((d) => new Date(d))));
   const maxDate = new Date(Math.max(...allDates.map((d) => new Date(d))));
 
-  const [startDate, setStartDate] = useState(
-    minDate.toISOString().slice(0, 10)
-  );
+  const [startDate, setStartDate] = useState(minDate.toISOString().slice(0, 10));
   const [endDate, setEndDate] = useState(maxDate.toISOString().slice(0, 10));
 
-  // Filter records by date range
   const filteredData = useMemo(() => {
     const dateCounts = {};
     records.forEach((rec) => {
@@ -36,72 +33,79 @@ function DailyUploadTrendChart({ records }) {
       .sort((a, b) => new Date(a.date) - new Date(b.date));
   }, [records, startDate, endDate]);
 
-return (
-    <div className="bg-white p-4 rounded-lg border">
-        <h4 className="font-semibold text-lg mb-2">📅 Daily Upload Trend</h4>
+  return (
+    <div className="bg-white p-6 rounded-xl border border-green-100 shadow-sm">
+      <h4 className="text-lg font-semibold mb-4 text-green-800">📅 Daily Upload Trend</h4>
 
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-            <span className="text-sm font-medium text-gray-700">Date Range:</span>
-            <div className="flex items-center gap-2">
-                <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="border px-2 py-1 rounded text-sm"
-                />
-                <span className="text-gray-500">to</span>
-                <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="border px-2 py-1 rounded text-sm"
-                />
-            </div>
+      <div className="flex flex-wrap items-center gap-4 mb-6">
+        <span className="text-sm font-medium text-gray-700">Date Range:</span>
+        <div className="flex items-center gap-2">
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border border-gray-300 px-3 py-1 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
+          <span className="text-gray-500">to</span>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border border-gray-300 px-3 py-1 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
         </div>
+      </div>
 
-        <ResponsiveContainer width="100%" height={300}>
-            <LineChart
-                data={filteredData}
-                margin={{ top: 10, right: 30, left: 0, bottom: 30 }}
-            >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                    dataKey="date"
-                    angle={-45}
-                    textAnchor="end"
-                    interval="preserveStartEnd"
-                    tick={{ fontSize: 12 }}
-                    tickFormatter={date => {
-                        const d = new Date(date);
-                        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                    }}
-                />
-
-                <YAxis
-                    tick={{ fontSize: 12 }}
-                    label={{
-                        value: "Deliveries",
-                        angle: -90,
-                        position: "insideLeft",
-                        offset: 10,
-                    }}
-                />
-                <Tooltip
-                    labelFormatter={date => {
-                        const d = new Date(date);
-                        return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-                    }}
-                />
-                <Line
-                    type="monotone"
-                    dataKey="count"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                />
-            </LineChart>
-        </ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={300}>
+        <LineChart
+          data={filteredData}
+          margin={{ top: 10, right: 30, left: 10, bottom: 40 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+          <XAxis
+            dataKey="date"
+            angle={-45}
+            textAnchor="end"
+            interval="preserveStartEnd"
+            tick={{ fontSize: 12 }}
+            tickFormatter={(date) => {
+              const d = new Date(date);
+              return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+            }}
+          />
+          <YAxis
+            tick={{ fontSize: 12 }}
+            label={{
+              value: "Deliveries",
+              angle: -90,
+              position: "insideLeft",
+              offset: 10,
+              fill: "#065f46",
+              fontSize: 12,
+            }}
+          />
+          <Tooltip
+            contentStyle={{
+              borderRadius: "6px",
+              fontSize: "0.875rem",
+            }}
+            labelFormatter={(date) => {
+              const d = new Date(date);
+              return d.toLocaleDateString(undefined, { month: "long", day: "numeric" });
+            }}
+          />
+          <Line
+            type="monotone"
+            dataKey="count"
+            stroke="#34d399" // green-400
+            strokeWidth={2.5}
+            dot={{ r: 4 }}
+            activeDot={{ r: 6 }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
     </div>
-);
+  );
 }
 
 export default DailyUploadTrendChart;

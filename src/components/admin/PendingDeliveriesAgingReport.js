@@ -30,26 +30,28 @@ function PendingDeliveriesAgingReport({ records }) {
   }, [records]);
 
   const BUCKET_COLORS = {
-    "0-2 days (recent)": "bg-green-100",
-    "3-5 days (moderate delay)": "bg-yellow-100",
-    "6-10 days (significant delay)": "bg-orange-100",
-    "11+ days (critical delay)": "bg-red-100",
+    "0-2 days (recent)": "bg-green-50 text-green-800",
+    "3-5 days (moderate delay)": "bg-yellow-50 text-yellow-800",
+    "6-10 days (significant delay)": "bg-orange-50 text-orange-800",
+    "11+ days (critical delay)": "bg-red-50 text-red-800",
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg border">
-      <h4 className="text-lg font-semibold mb-2">⏳ Pending Deliveries Aging Report</h4>
+    <div className="bg-white p-6 rounded-lg border border-green-100 shadow-sm">
+      <h4 className="text-lg font-semibold mb-2 text-green-800">
+        ⏳ Pending Deliveries Aging Report
+      </h4>
       <p className="text-sm text-gray-600 mb-4">
-        Shows how long pending deliveries have been waiting, grouped by how old they are.
+        Breakdown of pending deliveries based on how long they've been delayed.
       </p>
-      <ul className="space-y-2">
-        {Object.entries(agingBuckets).map(([label, records]) => (
+      <ul className="space-y-3">
+        {Object.entries(agingBuckets).map(([label, group]) => (
           <li
             key={label}
-            className={`flex justify-between items-center px-4 py-2 rounded ${BUCKET_COLORS[label]}`}
+            className={`flex justify-between items-center px-4 py-2 rounded border border-gray-200 ${BUCKET_COLORS[label]}`}
             title={
-              records.length > 0
-                ? records
+              group.length > 0
+                ? group
                     .map(
                       (r) =>
                         `${r.DriverID || "Unknown"} on ${format(
@@ -62,7 +64,7 @@ function PendingDeliveriesAgingReport({ records }) {
             }
           >
             <span className="font-medium">{label}</span>
-            <span className="font-semibold text-gray-800">{records.length} pending</span>
+            <span className="font-semibold">{group.length} pending</span>
           </li>
         ))}
       </ul>

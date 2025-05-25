@@ -25,8 +25,8 @@ function App() {
 
   if (auth.isLoading)
     return (
-      <div className="min-h-screen flex items-center justify-center text-lg">
-        Loading authentication...
+      <div className="min-h-screen flex items-center justify-center text-lg text-green-800">
+        Authenticating...
       </div>
     );
 
@@ -39,12 +39,10 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100 text-gray-800">
-        <header className="bg-white shadow p-4 flex justify-between items-center">
-          <h1
-            className="text-xl font-semibold p-2 rounded-md bg-gray-200 hover:bg-gray-300 transition-colors"
-            style={{ borderColor: "black", borderWidth: "0.5px" }}
-          >
+      <div className="min-h-screen bg-green-50 text-gray-800">
+        {/* Header */}
+        <header className="bg-white shadow-md border-b border-green-200 p-4 flex justify-between items-center">
+          <h1 className="text-xl font-bold text-green-800 bg-green-100 px-4 py-2 rounded-md border border-green-300">
             XYZ Logistics Portal
           </h1>
           {auth.isAuthenticated && (
@@ -54,7 +52,7 @@ function App() {
               </span>
               <button
                 onClick={signOutRedirect}
-                className="px-4 py-1 bg-red-400 text-white rounded hover:bg-red-500"
+                className="px-4 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
               >
                 Sign Out
               </button>
@@ -62,6 +60,7 @@ function App() {
           )}
         </header>
 
+        {/* Main */}
         <main className="p-6">
           <Routes>
             <Route
@@ -70,16 +69,16 @@ function App() {
                 auth.isAuthenticated ? (
                   <Navigate to="/dashboard" />
                 ) : (
-                  <div className="max-w-md mx-auto mt-20 p-6 bg-white rounded-xl shadow-md text-center space-y-4">
-                    <h2 className="text-2xl font-bold text-gray-800">
+                  <div className="max-w-md mx-auto mt-20 p-8 bg-white rounded-xl shadow border border-green-200 text-center space-y-5">
+                    <h2 className="text-2xl font-bold text-green-700">
                       Welcome to XYZ Logistics
                     </h2>
                     <p className="text-gray-600">
-                      Please log in to access your dashboard.
+                      Please sign in to access your dashboard.
                     </p>
                     <button
                       onClick={() => auth.signinRedirect()}
-                      className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                      className="mt-6 bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-md text-sm font-medium shadow-md border border-green-600 transition-all"
                     >
                       Sign In
                     </button>

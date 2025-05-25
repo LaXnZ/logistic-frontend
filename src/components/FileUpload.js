@@ -7,25 +7,30 @@ function FileUpload({ companyId }) {
 
   const handleUpload = async () => {
     if (!file) return alert("Please select a file first.");
-    await uploadFile(file, companyId);
-    alert("✅ Uploaded successfully!");
+    try {
+      await uploadFile(file, companyId);
+      alert("✅ Uploaded successfully!");
+      setFile(null);
+    } catch (error) {
+      alert("❌ Upload failed. Please try again.");
+      console.error(error);
+    }
   };
 
   return (
-    <div
-      className="p-6 mt-8 rounded-md"
-      style={{ borderColor: "black", borderWidth: "0.5px" }}
-    >
+    <div className="bg-white p-6 rounded-lg border shadow-sm"  style={{ borderColor: "black", borderWidth: "0.5px" }}>
+      
       <input
         type="file"
-        className="block w-full text-sm text-gray-700 border border-gray-300 rounded-sm cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        accept=".xlsx, .xls"
         onChange={(e) => setFile(e.target.files[0])}
+        className="w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-300"
       />
       <button
         onClick={handleUpload}
-        className="mt-4 w-full bg-green-200  hover:bg-green-400 text-black font-medium py-2 px-4 rounded-sm transition-all"
+        className="mt-6 bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-md text-sm font-medium shadow-md border border-green-600 transition-all"
       >
-        Upload
+        📤 Upload
       </button>
     </div>
   );

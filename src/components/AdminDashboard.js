@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useApiClient } from "../api/apiClient";
 import TopPerformingCompanyCard from "./admin/TopPerformingCompanyCard";
 import DeliverySuccessRateCard from "./admin/DeliverySuccessRateCard";
+import DriverWorkloadCard from "./admin/DriverWorkloadCard";
 
 function AdminDashboard() {
   const [records, setRecords] = useState([]);
@@ -102,7 +103,7 @@ function AdminDashboard() {
   const analytics = getAnalytics();
 
 return (
-    <div className="p-8 mt-10 rounded-lg shadow-lg bg-white border border-gray-200">
+    <div className="p-8 mt-10 rounded-lg  bg-white border border-gray-200">
         <div>
             {/* Filter */}
             <div className="flex items-center gap-4 mb-6">
@@ -124,12 +125,12 @@ return (
             </div>
 
             {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-                <div className="bg-blue-100 p-6 rounded-lg shadow flex flex-col items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2  gap-6 mt-4">
+                <div className="bg-blue-100 p-6 rounded-lg  flex border flex-col items-center">
                     <p className="font-semibold text-blue-900">Total Companies</p>
                     <p className="text-3xl font-bold text-blue-700 mt-2">{companies.length}</p>
                 </div>
-                <div className="bg-green-100 p-6 rounded-lg shadow flex flex-col items-center">
+                <div className="bg-green-100 p-6 rounded-lg border flex flex-col items-center">
                     <p className="font-semibold text-green-900">Total Records</p>
                     <p className="text-3xl font-bold text-green-700 mt-2">{analytics.total}</p>
                 </div>
@@ -165,13 +166,13 @@ return (
 
             {/* Highlights */}
             <div className="mt-8 flex flex-col sm:flex-row gap-6">
-                <div className="bg-yellow-50 p-4 rounded-lg flex-1 shadow">
+                <div className="bg-yellow-50 p-4 rounded-lg flex-1 border">
                     <p className="text-gray-700">
                         <span className="font-semibold">Most Active Driver:</span>{" "}
                         <span className="text-yellow-700">{analytics.mostActiveDriver || "N/A"}</span>
                     </p>
                 </div>
-                <div className="bg-purple-50 p-4 rounded-lg flex-1 shadow">
+                <div className="bg-purple-50 p-4 rounded-lg flex-1 border">
                     <p className="text-gray-700">
                         <span className="font-semibold">Most Frequent Route:</span>{" "}
                         <span className="text-purple-700">{analytics.mostFrequentRoute || "N/A"}</span>
@@ -181,11 +182,14 @@ return (
 
             {/* Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                <div className="p-6 rounded-lg border border-blue-200 bg-blue-50 shadow">
+                <div className="p-6 rounded-lg border border-blue-200 bg-blue-50 border">
                     <TopPerformingCompanyCard records={records} />
                 </div>
-                <div className="p-6 rounded-lg border border-green-200 bg-green-50 shadow">
+                <div className="p-6 rounded-lg border border-green-200 bg-green-50 border">
                     <DeliverySuccessRateCard records={records} />
+                </div>
+                 <div className="p-6 rounded-lg border border-red-200 bg-red-50 border">
+                    <DriverWorkloadCard records={records} />
                 </div>
             </div>
         </div>

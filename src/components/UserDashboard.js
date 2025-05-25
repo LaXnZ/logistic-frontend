@@ -61,7 +61,6 @@ function UserDashboard({ email }) {
           <section className="bg-white p-6 rounded-xl shadow">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-semibold">📋 Your Company Records</h3>
-          
             </div>
             <RecordsViewer companyId={companyId} sortedData={sortedRecords} />
           </section>

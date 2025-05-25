@@ -50,12 +50,10 @@ function DeliverySuccessRateCard({ records }) {
   const overallRate = (overallCompleted / overallTotal) * 100;
 
   return (
-    <div className="bg-white p-4 rounded-lg ">
-      <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <span role="img" aria-label="chart">
-          📈
-        </span>{" "}
-        Delivery Success Rate
+    <div className="bg-white p-4 rounded-lg border">
+      <h3 className="font-semibold text-lg mb-2">
+        
+        📊 Delivery Success Rate
       </h3>
       <div className="mb-4 flex items-center gap-2">
         <span className="text-gray-600 font-medium">Overall:</span>
@@ -75,9 +73,9 @@ function DeliverySuccessRateCard({ records }) {
               <span className="font-medium text-gray-700">{label}</span>
               <span
                 className={`font-semibold ${
-                  rate >= 90
+                  rate >= 70
                     ? "text-green-600"
-                    : rate >= 70
+                    : rate >= 40
                     ? "text-yellow-600"
                     : "text-red-600"
                 }`}

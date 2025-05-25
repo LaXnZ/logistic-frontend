@@ -11,7 +11,7 @@ function TopCompanyCard({ records }) {
   const topCompany = Object.entries(companyCount).sort((a, b) => b[1] - a[1])[0];
 
   return (
-    <div className="bg-white p-2 rounded-xl ">
+    <div className="bg-white p-4 rounded-lg border">
       <h4 className="font-semibold text-lg mb-2">🏆 Top Performing Company</h4>
       {topCompany ? (
         <p>

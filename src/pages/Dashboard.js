@@ -33,7 +33,7 @@ function Dashboard() {
             className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 border focus:outline-none"
             onClick={() => setActiveSection("upload")}
           >
-            📤 Upload Excel File
+            📤 Upload File
           </button>
           <button
             className="px-4 py-2 bg-blue-400 text-white rounded hover:bg-blue-500 border focus:outline-none"
@@ -56,7 +56,7 @@ function Dashboard() {
           {activeSection === "upload" && (
             <section className="bg-white p-6 rounded-lg border mb-8">
               <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                📤 Upload Excel File
+                📤 Upload File
               </h2>
               <FileUpload companyId={companyId} />
             </section>

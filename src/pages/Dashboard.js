@@ -9,7 +9,7 @@ function Dashboard() {
   const companyId = auth.user?.profile.email.split("@")[1].split(".")[0];
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 py-8">
+    <div >
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <header className="text-center mb-8">

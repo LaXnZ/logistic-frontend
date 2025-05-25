@@ -5,7 +5,8 @@ function RecordsViewer({ companyId }) {
   const [records, setRecords] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(companyId || "");
-  const [sortBy, setSortBy] = useState("date"); // default sorting
+  const [sortBy, setSortBy] = useState("date");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const { fetchRecords, fetchCompanies } = useApiClient();
 
@@ -58,14 +59,18 @@ function RecordsViewer({ companyId }) {
     };
   }, [selectedCompany]);
 
-  const sortedRecords = [...records].sort((a, b) => {
-    if (sortBy === "date") {
-      return new Date(b.DeliveryDate) - new Date(a.DeliveryDate); // Newest first
-    } else if (sortBy === "status") {
-      return a.DeliveryStatus.localeCompare(b.DeliveryStatus);
-    }
-    return 0;
-  });
+  const sortedRecords = [...records]
+    .filter((r) => {
+      return statusFilter === "all" || r.DeliveryStatus === statusFilter;
+    })
+    .sort((a, b) => {
+      if (sortBy === "date") {
+        return new Date(b.DeliveryDate) - new Date(a.DeliveryDate);
+      } else if (sortBy === "status") {
+        return a.DeliveryStatus.localeCompare(b.DeliveryStatus);
+      }
+      return 0;
+    });
 
   return (
     <div
@@ -95,7 +100,7 @@ function RecordsViewer({ companyId }) {
       )}
 
       {records.length > 0 && (
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-between mb-4 flex-wrap gap-2">
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
@@ -103,6 +108,17 @@ function RecordsViewer({ companyId }) {
           >
             <option value="date">Sort by Date</option>
             <option value="status">Sort by Status</option>
+          </select>
+
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-1 text-sm"
+          >
+            <option value="all">Show All</option>
+            <option value="Completed">Only Completed</option>
+            <option value="Pending">Only Pending</option>
+            <option value="In Transit">Only In Transit</option>
           </select>
         </div>
       )}

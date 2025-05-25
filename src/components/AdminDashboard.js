@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useApiClient } from "../api/apiClient";
 import TopPerformingCompanyCard from "./admin/TopPerformingCompanyCard";
 import DeliverySuccessRateCard from "./admin/DeliverySuccessRateCard";
@@ -9,12 +9,25 @@ import CompanyContributionShareCard from "./admin/CompanyContributionShareCard";
 import StatusProgressBreakdownCard from "./admin/StatusProgressBreakdownCard";
 import DeliveryVolumeHeatmap from "./admin/DeliveryVolumeHeatmap";
 import PendingDeliveriesAgingReport from "./admin/PendingDeliveriesAgingReport";
+import DownloadAnalyticsReportButton from "./admin/DownloadAnalyticsReportButton";
 
 function AdminDashboard() {
   const [records, setRecords] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState("");
   const { fetchRecords, fetchCompanies } = useApiClient();
+
+  const chartRefs = {
+    topCompanyRef: useRef(),
+    deliverySuccessRef: useRef(),
+    driverWorkloadRef: useRef(),
+    dailyUploadTrendRef: useRef(),
+    routePerformanceRef: useRef(),
+    companyContributionRef: useRef(),
+    statusProgressRef: useRef(),
+    deliveryVolumeRef: useRef(),
+    pendingAgingRef: useRef(),
+  };
 
   useEffect(() => {
     const loadCompanies = async () => {
@@ -24,9 +37,7 @@ function AdminDashboard() {
           typeof res.data?.body === "string"
             ? JSON.parse(res.data.body)
             : res.data?.body || res.data;
-
-        const list = body?.companies || [];
-        setCompanies(list);
+        setCompanies(body?.companies || []);
       } catch (err) {
         console.error("❌ Failed to load companies:", err);
       }
@@ -44,7 +55,6 @@ function AdminDashboard() {
             typeof res.data?.body === "string"
               ? JSON.parse(res.data.body)
               : res.data?.body || res.data;
-
           setRecords(parsed.records || []);
         } else {
           const allResponses = await Promise.all(companies.map(fetchRecords));
@@ -53,7 +63,6 @@ function AdminDashboard() {
               typeof r.data?.body === "string"
                 ? JSON.parse(r.data.body)
                 : r.data?.body || r.data;
-
             return Array.isArray(parsed?.records) ? parsed.records : [];
           });
           setRecords(allRecords);
@@ -82,7 +91,6 @@ function AdminDashboard() {
         (statusCounts[rec.DeliveryStatus] || 0) + 1;
       driverCounts[rec.DriverID] = (driverCounts[rec.DriverID] || 0) + 1;
       routeCounts[rec.Route] = (routeCounts[rec.Route] || 0) + 1;
-
       const date = rec.DeliveryDate;
       const company = rec.CompanyName;
       if (!latestUpload[company] || date > latestUpload[company]) {
@@ -109,122 +117,93 @@ function AdminDashboard() {
   const analytics = getAnalytics();
 
   return (
-    <div className="p-8 mt-10 rounded-lg  bg-white border border-gray-200">
-      <div>
-        {/* Filter */}
-        <div className="flex items-center gap-4 mb-6">
-          <label className="text-gray-700 font-semibold whitespace-nowrap">
-            Filter by Company:
-          </label>
-          <select
-            className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-            value={selectedCompany}
-            onChange={(e) => setSelectedCompany(e.target.value)}
-          >
-            <option value="">-- All Companies --</option>
-            {companies.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className="p-8 mt-10 rounded-lg bg-white border border-gray-200">
+      <div className="flex items-center gap-4 mb-6">
+        <label className="text-gray-700 font-semibold whitespace-nowrap">
+          Filter by Company:
+        </label>
+        <select
+          className="flex-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          value={selectedCompany}
+          onChange={(e) => setSelectedCompany(e.target.value)}
+        >
+          <option value="">-- All Companies --</option>
+          {companies.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
+        </select>
+      </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2  gap-6 mt-4">
-          <div className="bg-blue-100 p-6 rounded-lg  flex border flex-col items-center">
+      <div id="analytics-section">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+          <div className="bg-blue-100 p-6 rounded-lg border flex flex-col items-center">
             <p className="font-semibold text-blue-900">Total Companies</p>
-            <p className="text-3xl font-bold text-blue-700 mt-2">
-              {companies.length}
-            </p>
+            <p className="text-3xl font-bold text-blue-700 mt-2">{companies.length}</p>
           </div>
           <div className="bg-green-100 p-6 rounded-lg border flex flex-col items-center">
             <p className="font-semibold text-green-900">Total Records</p>
-            <p className="text-3xl font-bold text-green-700 mt-2">
-              {analytics.total}
-            </p>
+            <p className="text-3xl font-bold text-green-700 mt-2">{analytics.total}</p>
           </div>
         </div>
 
-        {/* Delivery Status */}
-        <div className="mt-8">
-          <h4 className="text-lg font-semibold mb-3 text-gray-800">
-            Delivery Status Counts
-          </h4>
-          <ul className="list-disc list-inside space-y-1 pl-4">
-            {Object.entries(analytics.statusCounts).map(([status, count]) => (
-              <li key={status} className="text-gray-700">
-                <span className="font-medium">{status}:</span> {count}
-              </li>
-            ))}
-          </ul>
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <h4 className="text-lg font-semibold mb-3 text-gray-800">Delivery Status Counts</h4>
+            <ul className="list-disc list-inside space-y-1 pl-4">
+              {Object.entries(analytics.statusCounts).map(([status, count]) => (
+                <li key={status} className="text-gray-700">
+                  <span className="font-medium">{status}:</span> {count}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-lg font-semibold mb-3 text-gray-800">Latest Upload per Company</h4>
+            <ul className="list-disc list-inside space-y-1 pl-4">
+              {Object.entries(analytics.latestUpload).map(([company, date]) => (
+                <li key={company} className="text-gray-700">
+                  <span className="font-medium">{company}:</span> {date}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
-        {/* Latest Upload */}
-        <div className="mt-8">
-          <h4 className="text-lg font-semibold mb-3 text-gray-800">
-            Latest Upload per Company
-          </h4>
-          <ul className="list-disc list-inside space-y-1 pl-4">
-            {Object.entries(analytics.latestUpload).map(([company, date]) => (
-              <li key={company} className="text-gray-700">
-                <span className="font-medium">{company}:</span> {date}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Highlights */}
         <div className="mt-8 flex flex-col sm:flex-row gap-6">
           <div className="bg-yellow-50 p-4 rounded-lg flex-1 border">
             <p className="text-gray-700">
               <span className="font-semibold">Most Active Driver:</span>{" "}
-              <span className="text-yellow-700">
-                {analytics.mostActiveDriver || "N/A"}
-              </span>
+              <span className="text-yellow-700">{analytics.mostActiveDriver || "N/A"}</span>
             </p>
           </div>
           <div className="bg-purple-50 p-4 rounded-lg flex-1 border">
             <p className="text-gray-700">
               <span className="font-semibold">Most Frequent Route:</span>{" "}
-              <span className="text-purple-700">
-                {analytics.mostFrequentRoute || "N/A"}
-              </span>
+              <span className="text-purple-700">{analytics.mostFrequentRoute || "N/A"}</span>
             </p>
           </div>
         </div>
 
-        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-          <div className="p-6 rounded-lg border border-blue-200 bg-blue-50 border">
-            <TopPerformingCompanyCard records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-green-200 bg-green-50 border">
-            <DeliverySuccessRateCard records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-red-200 bg-red-50 border">
-            <DriverWorkloadCard records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-yellow-200 bg-yellow-50 border">
-            <DailyUploadTrendChart records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-orange-200 bg-orange-50 border">
-            <RoutePerformanceSummary records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
-            <CompanyContributionShareCard records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
-            <StatusProgressBreakdownCard records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
-            <DeliveryVolumeHeatmap records={records} />
-          </div>
-          <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
-            <PendingDeliveriesAgingReport records={records} />
-          </div>
+          <div ref={chartRefs.topCompanyRef}><TopPerformingCompanyCard records={records} /></div>
+          <div ref={chartRefs.deliverySuccessRef}><DeliverySuccessRateCard records={records} /></div>
+          <div ref={chartRefs.driverWorkloadRef}><DriverWorkloadCard records={records} /></div>
+          <div ref={chartRefs.dailyUploadTrendRef}><DailyUploadTrendChart records={records} /></div>
+          <div ref={chartRefs.routePerformanceRef}><RoutePerformanceSummary records={records} /></div>
+          <div ref={chartRefs.companyContributionRef}><CompanyContributionShareCard records={records} /></div>
+          <div ref={chartRefs.statusProgressRef}><StatusProgressBreakdownCard records={records} /></div>
+          <div ref={chartRefs.deliveryVolumeRef}><DeliveryVolumeHeatmap records={records} /></div>
+          <div ref={chartRefs.pendingAgingRef}><PendingDeliveriesAgingReport records={records} /></div>
         </div>
       </div>
+
+      <DownloadAnalyticsReportButton
+        analytics={analytics}
+        companies={companies}
+        records={records}
+        adminEmail="sumudithalanz@gmail.com"
+        chartRefs={chartRefs}
+      />
     </div>
   );
 }

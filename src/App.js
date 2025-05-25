@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
+import UserDashboard from "./components/UserDashboard";
 
 function App() {
   const auth = useAuth();
@@ -89,7 +90,15 @@ function App() {
             <Route
               path="/dashboard"
               element={
-                auth.isAuthenticated ? <Dashboard /> : <Navigate to="/" />
+                auth.isAuthenticated ? (
+                  auth.user?.profile.email === "sumudithalanz@gmail.com" ? (
+                    <Dashboard />
+                  ) : (
+                    <UserDashboard email={auth.user?.profile.email} />
+                  )
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
           </Routes>

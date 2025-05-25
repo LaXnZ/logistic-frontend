@@ -23,7 +23,7 @@ function FileUpload({ companyId }) {
       />
       <button
         onClick={handleUpload}
-        className="mt-4 w-full bg-green-100  hover:bg-blue-700 text-black font-medium py-2 px-4 rounded-sm transition-all"
+        className="mt-4 w-full bg-green-200  hover:bg-green-400 text-black font-medium py-2 px-4 rounded-sm transition-all"
       >
         Upload
       </button>

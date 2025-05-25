@@ -8,6 +8,7 @@ import RoutePerformanceSummary from "./admin/RoutePerformanceSummary";
 import CompanyContributionShareCard from "./admin/CompanyContributionShareCard";
 import StatusProgressBreakdownCard from "./admin/StatusProgressBreakdownCard";
 import DeliveryVolumeHeatmap from "./admin/DeliveryVolumeHeatmap";
+import PendingDeliveriesAgingReport from "./admin/PendingDeliveriesAgingReport";
 
 function AdminDashboard() {
   const [records, setRecords] = useState([]);
@@ -218,6 +219,9 @@ function AdminDashboard() {
           </div>
           <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
             <DeliveryVolumeHeatmap records={records} />
+          </div>
+          <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
+            <PendingDeliveriesAgingReport records={records} />
           </div>
         </div>
       </div>

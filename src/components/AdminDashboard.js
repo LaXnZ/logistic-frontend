@@ -3,6 +3,7 @@ import { useApiClient } from "../api/apiClient";
 import TopPerformingCompanyCard from "./admin/TopPerformingCompanyCard";
 import DeliverySuccessRateCard from "./admin/DeliverySuccessRateCard";
 import DriverWorkloadCard from "./admin/DriverWorkloadCard";
+import DailyUploadTrendChart from "./admin/DailyUploadTrendChart";
 
 function AdminDashboard() {
   const [records, setRecords] = useState([]);
@@ -190,6 +191,9 @@ return (
                 </div>
                  <div className="p-6 rounded-lg border border-red-200 bg-red-50 border">
                     <DriverWorkloadCard records={records} />
+                </div>
+                     <div className="p-6 rounded-lg border border-yellow-200 bg-yellow-50 border">
+                    <DailyUploadTrendChart records={records} />
                 </div>
             </div>
         </div>

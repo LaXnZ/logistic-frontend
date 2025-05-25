@@ -6,6 +6,7 @@ import DriverWorkloadCard from "./admin/DriverWorkloadCard";
 import DailyUploadTrendChart from "./admin/DailyUploadTrendChart";
 import RoutePerformanceSummary from "./admin/RoutePerformanceSummary";
 import CompanyContributionShareCard from "./admin/CompanyContributionShareCard";
+import StatusProgressBreakdownCard from "./admin/StatusProgressBreakdownCard";
 
 function AdminDashboard() {
   const [records, setRecords] = useState([]);
@@ -210,6 +211,9 @@ function AdminDashboard() {
           </div>
           <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
             <CompanyContributionShareCard records={records} />
+          </div>
+          <div className="p-6 rounded-lg border border-gray-200 bg-gray-50 border">
+            <StatusProgressBreakdownCard records={records} />
           </div>
         </div>
       </div>

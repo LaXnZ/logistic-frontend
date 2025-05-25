@@ -18,11 +18,13 @@ function FileUpload({ companyId }) {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg border shadow-sm"  style={{ borderColor: "black", borderWidth: "0.5px" }}>
-      
+    <div
+      className="bg-white p-6 rounded-lg border shadow-sm"
+      style={{ borderColor: "black", borderWidth: "0.5px" }}
+    >
       <input
         type="file"
-        accept=".xlsx, .xls"
+        accept=".xlsx, .xls, .csv"
         onChange={(e) => setFile(e.target.files[0])}
         className="w-full px-3 py-2 text-sm text-gray-700 border border-gray-300 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-300"
       />

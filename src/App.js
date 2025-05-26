@@ -37,6 +37,9 @@ function App() {
       </div>
     );
 
+  const groups = auth.user?.profile["cognito:groups"] || [];
+  const isAdmin = groups.includes("Admins");
+
   return (
     <Router>
       <div className="min-h-screen bg-green-50 text-gray-800">
@@ -90,7 +93,7 @@ function App() {
               path="/dashboard"
               element={
                 auth.isAuthenticated ? (
-                  auth.user?.profile.email === "sumudithalanz@gmail.com" ? (
+                  isAdmin ? (
                     <Dashboard />
                   ) : (
                     <UserDashboard email={auth.user?.profile.email} />

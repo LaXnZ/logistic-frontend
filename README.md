@@ -1,70 +1,139 @@
-# Getting Started with Create React App
+# 📦 Logistics Automation Platform – Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React-based frontend for the Logistics Automation Platform, enabling seamless logistics management for users and administrators. Features secure authentication, intuitive file uploads, real-time record viewing, and advanced analytics—all integrated with AWS services and role-based access via Cognito.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Features
 
-### `npm start`
+- **Secure AWS Cognito Authentication**  
+    Robust login and session management for users and admins.
+- **Flexible File Uploads**  
+    Upload delivery data in CSV or Excel formats, organized by company.
+- **Comprehensive Record Management**  
+    View, filter, and track delivery records and upload history.
+- **Admin Analytics Dashboard**  
+    Visualize logistics data, export analytics as PDF, and monitor company contributions.
+- **Role-Based Access Control**  
+    Dynamic content rendering based on user roles (admin vs. regular user).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🏗️ Project Structure
 
-### `npm test`
+```
+logistics-frontend/
+├── public/                        # Static assets, index.html, etc.
+├── src/
+│   ├── api/
+│   │   └── apiClient.js           # API calls with authentication
+│   ├── components/
+│   │   ├── admin/
+│   │   │   ├── CompanyContributionShareCard.js
+│   │   │   ├── DownloadAnalyticsReportButton.js
+│   │   │   ├── DeliveryVolumeHeatmap.js
+│   │   │   ├── RoutePerformanceSummary.js
+│   │   │   ├── StatusProgressBreakdownCard.js
+│   │   │   └── ...                # Additional analytics components
+│   │   ├── AdminDashboard.js      # Analytics panel for admins
+│   │   ├── UserDashboard.js       # Dashboard for regular users
+│   │   ├── RecordsViewer.js       # Logistics records viewer
+│   │   ├── FileUpload.js          # File upload component
+│   │   └── ...                    # Shared components
+│   ├── pages/
+│   │   └── Dashboard.js           # Routing between admin/user sections
+│   ├── App.js                     # Root component (routing/auth)
+│   ├── index.js                   # Entry point
+│   ├── index.css                  # TailwindCSS/global styles
+│   └── ...
+├── .env                           # Environment variables
+├── package.json
+├── README.md
+└── ...                            # Config files (.gitignore, etc.)
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ⚙️ Environment Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Create a `.env` file in the project root with the following configuration:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```env
+# AWS Cognito Authentication
+REACT_APP_COGNITO_AUTHORITY=https://<your-cognito-domain>.auth.<region>.amazoncognito.com
+REACT_APP_COGNITO_CLIENT_ID=<your-client-id>
+REACT_APP_COGNITO_REDIRECT_URI=https://your-frontend-url.com
+REACT_APP_COGNITO_RESPONSE_TYPE=code
+REACT_APP_COGNITO_SCOPE=openid profile email
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# API Gateway Endpoint
+REACT_APP_API_BASE_URL=https://<your-api-id>.execute-api.<region>.amazonaws.com/prod
 
-### `npm run eject`
+# Logout and Domain
+REACT_APP_COGNITO_LOGOUT_URI=https://your-frontend-url.com
+REACT_APP_COGNITO_DOMAIN=https://<your-cognito-domain>.auth.<region>.amazoncognito.com
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+# (Optional) S3 Configuration
+S3_BUCKET_NAME=xyz-logistics-s3
+S3_BUCKET_REGION=eu-north-1
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+> **Important:** Never commit your `.env` file to version control.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 🛠️ Installation & Local Development
 
-## Learn More
+```bash
+# Clone the repository
+git clone https://github.com/your-org/logistics-frontend.git
+cd logistics-frontend
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+# Install dependencies
+npm install
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Start the development server
+npm start
+```
 
-### Code Splitting
+The app will be available at [https://logistic-frontend-drab.vercel.app/](https://logistic-frontend-drab.vercel.app/).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+---
 
-### Analyzing the Bundle Size
+## 🧠 Key Technologies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **React** & **Tailwind CSS** for UI
+- [`react-oidc-context`](https://github.com/authts/react-oidc-context) for Cognito authentication
+- **AWS Cognito** (User Pools & Groups)
+- **AWS API Gateway** & **Lambda**
+- **AWS S3** & **DynamoDB**
+- **jsPDF** & **html2canvas** for PDF export
 
-### Making a Progressive Web App
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## 🧪 Testing
 
-### Advanced Configuration
+Manual testing steps:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Log in as both admin and regular user
+- Upload delivery files
+- View and filter records
+- Access analytics dashboard (admin)
+- Download analytics as PDF
+- Verify email notifications
 
-### Deployment
+> Automated test coverage is not yet implemented.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 📄 License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Developed as part of a university assignment. Intended for academic and internal demonstration purposes only.
+
+---
+
+## ✍️ Author
+
+**Sumuditha L.**  
+APIIT | 2025  
+[sumudithalanz@gmail.com](mailto:sumudithalanz@gmail.com)

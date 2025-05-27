@@ -113,16 +113,34 @@ The app will be available at [https://logistic-frontend-drab.vercel.app/](https:
 
 ## 🧪 Testing
 
-Manual testing steps:
+### Manual Testing
 
-- Log in as both admin and regular user
-- Upload delivery files
-- View and filter records
-- Access analytics dashboard (admin)
-- Download analytics as PDF
-- Verify email notifications
+- Log in as both admin and regular user via Cognito authentication.
+- Upload `.csv` and `.xlsx` files through the frontend.
+- Verify correct routing of uploaded files to S3 and subsequent record processing.
+- View and filter delivery records by company and status.
+- Access the admin dashboard, review analytics, and export reports as PDF.
+- Confirm email notifications are sent to both admin and uploader.
 
-> Automated test coverage is not yet implemented.
+### Automated Testing
+
+Automated tests are implemented using **Jest** and **React Testing Library** for key components:
+
+| Component         | Test Focus                                      |
+|-------------------|-------------------------------------------------|
+| AdminDashboard    | Company filtering, analytics rendering           |
+| FileUpload        | File selection, upload button interaction        |
+| RecordsViewer     | Record sorting, filtering, dynamic rendering     |
+| UserDashboard     | File upload and record view integration for users|
+| useApiClient (mocked) | API call success/failure handling           |
+
+- Tests are organized under the `tests/` directory, mirroring the `src/` structure for modularity and consistency.
+- Run all tests with:
+    ```bash
+    npm test
+    # or
+    yarn test
+    ```
 
 ---
 
